@@ -1,0 +1,152 @@
+
+No hazards:
+Instr# 	 Addr 	 Instruction 				Completion Time
+------ 	 ---- 	 ----------- 				---------------
+1:   	 0x0	 irmovq    0x100, %rsp              	5
+2:   	 0xa	 irmovq    0x3, %rdi                	6
+3:   	 0x14	 call      0x1e                    	7
+4:   	 0x1e	 irmovq    0x10, %r8               	8
+5:   	 0x28	 subq      %r8, %rsp               	9
+6:   	 0x2a	 rrmovq    %rdi, %rax              	10
+7:   	 0x2c	 irmovq    0x1, %r8                	11
+8:   	 0x36	 subq      %rdi, %r8               	12
+9:   	 0x38	 jge       0x95                    	13
+10:   	 0x41	 rmmovq    %rdi, 0x0(%rsp)         	14
+11:   	 0x4b	 irmovq    0x1, %r8                	15
+12:   	 0x55	 subq      %r8, %rdi               	16
+13:   	 0x57	 call      0x1e                    	17
+14:   	 0x1e	 irmovq    0x10, %r8               	18
+15:   	 0x28	 subq      %r8, %rsp               	19
+16:   	 0x2a	 rrmovq    %rdi, %rax              	20
+17:   	 0x2c	 irmovq    0x1, %r8                	21
+18:   	 0x36	 subq      %rdi, %r8               	22
+19:   	 0x38	 jge       0x95                    	23
+20:   	 0x41	 rmmovq    %rdi, 0x0(%rsp)         	24
+21:   	 0x4b	 irmovq    0x1, %r8                	25
+22:   	 0x55	 subq      %r8, %rdi               	26
+23:   	 0x57	 call      0x1e                    	27
+24:   	 0x1e	 irmovq    0x10, %r8               	28
+25:   	 0x28	 subq      %r8, %rsp               	29
+26:   	 0x2a	 rrmovq    %rdi, %rax              	30
+27:   	 0x2c	 irmovq    0x1, %r8                	31
+28:   	 0x36	 subq      %rdi, %r8               	32
+29:   	 0x38	 jge       0x95                    	33
+30:   	 0x95	 irmovq    0x10, %r8               	34
+31:   	 0x9f	 addq      %r8, %rsp               	35
+32:   	 0xa1	 ret                               	36
+33:   	 0x60	 rmmovq    %rax, 0x8(%rsp)         	37
+34:   	 0x6a	 mrmovq    0x0(%rsp), %rdi         	38
+35:   	 0x74	 irmovq    0x2, %r8                	39
+36:   	 0x7e	 subq      %r8, %rdi               	40
+37:   	 0x80	 call      0x1e                    	41
+38:   	 0x1e	 irmovq    0x10, %r8               	42
+39:   	 0x28	 subq      %r8, %rsp               	43
+40:   	 0x2a	 rrmovq    %rdi, %rax              	44
+41:   	 0x2c	 irmovq    0x1, %r8                	45
+42:   	 0x36	 subq      %rdi, %r8               	46
+43:   	 0x38	 jge       0x95                    	47
+44:   	 0x95	 irmovq    0x10, %r8               	48
+45:   	 0x9f	 addq      %r8, %rsp               	49
+46:   	 0xa1	 ret                               	50
+47:   	 0x89	 mrmovq    0x8(%rsp), %r8          	51
+48:   	 0x93	 addq      %r8, %rax               	52
+49:   	 0x95	 irmovq    0x10, %r8               	53
+50:   	 0x9f	 addq      %r8, %rsp               	54
+51:   	 0xa1	 ret                               	55
+52:   	 0x60	 rmmovq    %rax, 0x8(%rsp)         	56
+53:   	 0x6a	 mrmovq    0x0(%rsp), %rdi         	57
+54:   	 0x74	 irmovq    0x2, %r8                	58
+55:   	 0x7e	 subq      %r8, %rdi               	59
+56:   	 0x80	 call      0x1e                    	60
+57:   	 0x1e	 irmovq    0x10, %r8               	61
+58:   	 0x28	 subq      %r8, %rsp               	62
+59:   	 0x2a	 rrmovq    %rdi, %rax              	63
+60:   	 0x2c	 irmovq    0x1, %r8                	64
+61:   	 0x36	 subq      %rdi, %r8               	65
+62:   	 0x38	 jge       0x95                    	66
+63:   	 0x95	 irmovq    0x10, %r8               	67
+64:   	 0x9f	 addq      %r8, %rsp               	68
+65:   	 0xa1	 ret                               	69
+66:   	 0x89	 mrmovq    0x8(%rsp), %r8          	70
+67:   	 0x93	 addq      %r8, %rax               	71
+68:   	 0x95	 irmovq    0x10, %r8               	72
+69:   	 0x9f	 addq      %r8, %rsp               	73
+70:   	 0xa1	 ret                               	74
+71:   	 0x1d	 halt                              	75
+
+
+
+Forward on hazards:
+Instr# 	 Addr 	 Instruction 				Completion Time
+------ 	 ---- 	 ----------- 				---------------
+1:   	 0x0	 irmovq    0x100, %rsp              	5
+2:   	 0xa	 irmovq    0x3, %rdi                	6
+3:   	 0x14	 call      0x1e                    	7
+4:   	 0x1e	 irmovq    0x10, %r8               	10
+5:   	 0x28	 subq      %r8, %rsp               	11
+6:   	 0x2a	 rrmovq    %rdi, %rax              	12
+7:   	 0x2c	 irmovq    0x1, %r8                	13
+8:   	 0x36	 subq      %rdi, %r8               	14
+9:   	 0x38	 jge       0x95                    	15
+10:   	 0x41	 rmmovq    %rdi, 0x0(%rsp)         	18
+11:   	 0x4b	 irmovq    0x1, %r8                	19
+12:   	 0x55	 subq      %r8, %rdi               	20
+13:   	 0x57	 call      0x1e                    	21
+14:   	 0x1e	 irmovq    0x10, %r8               	24
+15:   	 0x28	 subq      %r8, %rsp               	25
+16:   	 0x2a	 rrmovq    %rdi, %rax              	26
+17:   	 0x2c	 irmovq    0x1, %r8                	27
+18:   	 0x36	 subq      %rdi, %r8               	28
+19:   	 0x38	 jge       0x95                    	29
+20:   	 0x41	 rmmovq    %rdi, 0x0(%rsp)         	32
+21:   	 0x4b	 irmovq    0x1, %r8                	33
+22:   	 0x55	 subq      %r8, %rdi               	34
+23:   	 0x57	 call      0x1e                    	35
+24:   	 0x1e	 irmovq    0x10, %r8               	38
+25:   	 0x28	 subq      %r8, %rsp               	39
+26:   	 0x2a	 rrmovq    %rdi, %rax              	40
+27:   	 0x2c	 irmovq    0x1, %r8                	41
+28:   	 0x36	 subq      %rdi, %r8               	42
+29:   	 0x38	 jge       0x95                    	43
+30:   	 0x95	 irmovq    0x10, %r8               	46
+31:   	 0x9f	 addq      %r8, %rsp               	47
+32:   	 0xa1	 ret                               	48
+33:   	 0x60	 rmmovq    %rax, 0x8(%rsp)         	51
+34:   	 0x6a	 mrmovq    0x0(%rsp), %rdi         	52
+35:   	 0x74	 irmovq    0x2, %r8                	53
+36:   	 0x7e	 subq      %r8, %rdi               	54
+37:   	 0x80	 call      0x1e                    	55
+38:   	 0x1e	 irmovq    0x10, %r8               	58
+39:   	 0x28	 subq      %r8, %rsp               	59
+40:   	 0x2a	 rrmovq    %rdi, %rax              	60
+41:   	 0x2c	 irmovq    0x1, %r8                	61
+42:   	 0x36	 subq      %rdi, %r8               	62
+43:   	 0x38	 jge       0x95                    	63
+44:   	 0x95	 irmovq    0x10, %r8               	66
+45:   	 0x9f	 addq      %r8, %rsp               	67
+46:   	 0xa1	 ret                               	68
+47:   	 0x89	 mrmovq    0x8(%rsp), %r8          	71
+48:   	 0x93	 addq      %r8, %rax               	73
+49:   	 0x95	 irmovq    0x10, %r8               	74
+50:   	 0x9f	 addq      %r8, %rsp               	75
+51:   	 0xa1	 ret                               	76
+52:   	 0x60	 rmmovq    %rax, 0x8(%rsp)         	79
+53:   	 0x6a	 mrmovq    0x0(%rsp), %rdi         	80
+54:   	 0x74	 irmovq    0x2, %r8                	81
+55:   	 0x7e	 subq      %r8, %rdi               	82
+56:   	 0x80	 call      0x1e                    	83
+57:   	 0x1e	 irmovq    0x10, %r8               	86
+58:   	 0x28	 subq      %r8, %rsp               	87
+59:   	 0x2a	 rrmovq    %rdi, %rax              	88
+60:   	 0x2c	 irmovq    0x1, %r8                	89
+61:   	 0x36	 subq      %rdi, %r8               	90
+62:   	 0x38	 jge       0x95                    	91
+63:   	 0x95	 irmovq    0x10, %r8               	94
+64:   	 0x9f	 addq      %r8, %rsp               	95
+65:   	 0xa1	 ret                               	96
+66:   	 0x89	 mrmovq    0x8(%rsp), %r8          	99
+67:   	 0x93	 addq      %r8, %rax               	101
+68:   	 0x95	 irmovq    0x10, %r8               	102
+69:   	 0x9f	 addq      %r8, %rsp               	103
+70:   	 0xa1	 ret                               	104
+71:   	 0x1d	 halt                              	107

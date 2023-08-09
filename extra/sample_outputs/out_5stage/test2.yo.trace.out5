@@ -1,0 +1,29 @@
+
+No hazards:
+Instr# 	 Addr 	 Instruction 				Completion Time
+------ 	 ---- 	 ----------- 				---------------
+1:   	 0x0	 irmovq    0x100, %rsp              	5
+2:   	 0xa	 irmovq    0x20, %rdi               	6
+3:   	 0x14	 call      0x30                    	7
+4:   	 0x30	 mrmovq    0x0(%rdi), %r8          	8
+5:   	 0x3a	 mrmovq    0x8(%rdi), %r9          	9
+6:   	 0x44	 subq      %r8, %r9                	10
+7:   	 0x46	 jg        0x5a                    	11
+8:   	 0x5a	 mrmovq    0x8(%rdi), %rax         	12
+9:   	 0x64	 ret                               	13
+10:   	 0x1d	 halt                              	14
+
+
+Forward on hazards:
+Instr# 	 Addr 	 Instruction 				Completion Time
+------ 	 ---- 	 ----------- 				---------------
+1:   	 0x0	 irmovq    0x100, %rsp              	5
+2:   	 0xa	 irmovq    0x20, %rdi               	6
+3:   	 0x14	 call      0x30                    	7
+4:   	 0x30	 mrmovq    0x0(%rdi), %r8          	10
+5:   	 0x3a	 mrmovq    0x8(%rdi), %r9          	11
+6:   	 0x44	 subq      %r8, %r9                	13
+7:   	 0x46	 jg        0x5a                    	14
+8:   	 0x5a	 mrmovq    0x8(%rdi), %rax         	17
+9:   	 0x64	 ret                               	18
+10:   	 0x1d	 halt                              	21
