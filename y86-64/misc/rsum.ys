@@ -1,0 +1,35 @@
+# Initial code
+	irmovq Stack,%rsp
+	irmovq ele1, %rdi
+	call rsum_list
+	halt
+
+# Sample linked list
+.align 8
+ele1:
+	.quad 0x00a
+	.quad ele2
+ele2:
+	.quad 0x0b0
+	.quad ele3
+ele3:
+	.quad 0xc00
+	.quad 0
+
+# long rsum_list(list_ptr ls)
+# ls in %rdi
+rsum_list:
+	irmovq $0,%rax          # set return val to 0
+	andq %rdi,%rdi		# Set condition codes
+	je return		# If ls == null, return 0
+	pushq %rbx		# Save callee-saved register
+	mrmovq (%rdi),%rbx	# Get *ls
+	mrmovq 8(%rdi),%rdi
+	call rsum_list
+	addq %rbx,%rax          # Add *ls to sum
+	popq %rbx		# Restore callee-saved register
+return:
+	ret
+
+.pos 0x400
+Stack:

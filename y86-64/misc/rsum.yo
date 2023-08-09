@@ -1,0 +1,35 @@
+                            | # Initial code
+0x000: 30f40004000000000000 | 	irmovq Stack,%rsp
+0x00a: 30f72000000000000000 | 	irmovq ele1, %rdi
+0x014: 805000000000000000   | 	call rsum_list
+0x01d: 00                   | 	halt
+                            | 
+                            | # Sample linked list
+0x020:                      | .align 8
+0x020:                      | ele1:
+0x020: 0a00000000000000     | 	.quad 0x00a
+0x028: 3000000000000000     | 	.quad ele2
+0x030:                      | ele2:
+0x030: b000000000000000     | 	.quad 0x0b0
+0x038: 4000000000000000     | 	.quad ele3
+0x040:                      | ele3:
+0x040: 000c000000000000     | 	.quad 0xc00
+0x048: 0000000000000000     | 	.quad 0
+                            | 
+                            | # long rsum_list(list_ptr ls)
+                            | # ls in %rdi
+0x050:                      | rsum_list:
+0x050: 30f00000000000000000 | 	irmovq $0,%rax          # set return val to 0
+0x05a: 6277                 | 	andq %rdi,%rdi		# Set condition codes
+0x05c: 738800000000000000   | 	je return		# If ls == null, return 0
+0x065: a03f                 | 	pushq %rbx		# Save callee-saved register
+0x067: 50370000000000000000 | 	mrmovq (%rdi),%rbx	# Get *ls
+0x071: 50770800000000000000 | 	mrmovq 8(%rdi),%rdi
+0x07b: 805000000000000000   | 	call rsum_list
+0x084: 6030                 | 	addq %rbx,%rax          # Add *ls to sum
+0x086: b03f                 | 	popq %rbx		# Restore callee-saved register
+0x088:                      | return:
+0x088: 90                   | 	ret
+                            | 
+0x400:                      | .pos 0x400
+0x400:                      | Stack:

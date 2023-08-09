@@ -1,0 +1,66 @@
+                            | # Initial code
+0x000: 30f40004000000000000 |         irmovq Stack,%rsp
+0x00a: 30f72800000000000000 |         irmovq array,%rdi
+0x014: 30f64000000000000000 |         irmovq len,%rsi
+0x01e: 804800000000000000   |         call move_min_to_front
+0x027: 00                   | 	halt
+                            | 
+0x028:                      | .align 8
+                            | # Array
+0x028:                      | array:
+0x028: 0900000000000000     |         .quad 9
+0x030: 2a00000000000000     |         .quad 42
+0x038: 1100000000000000     |         .quad 17
+                            | 
+0x040:                      | len:
+0x040: 0300000000000000     | 	.quad 3
+                            | 
+                            | # long find_min_index(long *arr, long len)
+                            | # *arr in %rdi
+                            | # len in %rsi
+                            | 
+0x048:                      | move_min_to_front:
+0x048: 30f00000000000000000 |         irmovq $0,%rax          # set minIndex to 0
+0x052: 6277                 | 	andq %rdi,%rdi          # Set condition codes
+0x054: 731801000000000000   |         je return		# If arr == 0, goto return
+0x05d: 207c                 | 	rrmovq %rdi,%r12	# memory address at arr[i]
+0x05f: 30fd0100000000000000 | 	irmovq $1,%r13		# Constant 1
+0x069: 30f80000000000000000 | 	irmovq $0,%r8           # Constant i
+0x073: 30f90800000000000000 | 	irmovq $8,%r9		# Constant 8 bytes for long
+0x07d: 207a                 | 	rrmovq %rdi,%r10	# memory address at arr[minIndex]
+0x07f: 709500000000000000   | 	jmp find_min_index	# jmp to find_min_index
+                            | 
+0x088:                      | increment:
+0x088: 60d8                 | 	addq %r13,%r8		# increment i by 1
+0x08a: 609c                 | 	addq %r9,%r12		# goes to next index in array, array[i]
+0x08c: 709500000000000000   | 	jmp find_min_index	# jump to find_min_index
+                            | 
+0x095:                      | find_min_index:
+0x095: 50b60000000000000000 | 	mrmovq (%rsi),%r11	# temporary register for condtion code
+0x09f: 618b                 | 	subq %r8,%r11		# Test len > i
+0x0a1: 71da00000000000000   | 	jle switching_values	# If len <= i, goto switching_values
+0x0aa: 50ba0000000000000000 | 	mrmovq (%r10),%r11	# temporary register to set condition code
+0x0b4: a02f                 | 	pushq %rdx		# save callee-saved register
+0x0b6: 502c0000000000000000 | 	mrmovq (%r12),%rdx	# temporarily moves value at arr[i] to temp register
+0x0c0: 612b                 | 	subq %rdx,%r11		# Test arr[minIndex] > arr[i]
+0x0c2: b02f                 | 	popq %rdx		# restore callee-saved register
+0x0c4: 718800000000000000   | 	jle increment		# if arr[minIndex] <= arr[i], goto increment
+0x0cd: 2080                 | 	rrmovq %r8,%rax		# set minIndex to i
+0x0cf: 20ca                 | 	rrmovq %r12,%r10	# sets register that holds value of arr[minIndex] to arr[i]
+0x0d1: 708800000000000000   | 	jmp increment		# repeat loop by going to increment
+                            | 
+0x0da:                      | switching_values:
+0x0da: 200e                 | 	rrmovq %rax,%r14	# Test min_index
+0x0dc: 62ee                 | 	andq %r14,%r14		# sets test condition
+0x0de: 711801000000000000   | 	jle return		# if minIndex <= 0, goto return
+0x0e7: 50b70000000000000000 | 	mrmovq (%rdi),%r11	# sets temp value to arr[0] value
+0x0f1: 508a0000000000000000 | 	mrmovq (%r10),%r8	# temporarily moves value at memory to register
+0x0fb: 40870000000000000000 | 	rmmovq %r8,(%rdi)	# sets arr[0] to the value at arr[minIndex]
+0x105: 40ba0000000000000000 | 	rmmovq %r11,(%r10)	# sets arr[minIndex] to the value at arr[0]
+0x10f: 701801000000000000   | 	jmp return		# return
+                            | 
+0x118:                      | return:
+0x118: 90                   |         ret                     # return
+                            | 
+0x400:                      | .pos 0x400
+0x400:                      | Stack:

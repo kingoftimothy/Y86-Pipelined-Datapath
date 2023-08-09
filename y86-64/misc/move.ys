@@ -1,0 +1,66 @@
+# Initial code
+        irmovq Stack,%rsp
+        irmovq array,%rdi
+        irmovq len,%rsi
+        call move_min_to_front
+	halt
+
+.align 8
+# Array
+array:
+        .quad 9
+        .quad 42
+        .quad 17
+
+len:
+	.quad 3
+
+# long find_min_index(long *arr, long len)
+# *arr in %rdi
+# len in %rsi
+
+move_min_to_front:
+        irmovq $0,%rax          # set minIndex to 0
+	andq %rdi,%rdi          # Set condition codes
+        je return		# If arr == 0, goto return
+	rrmovq %rdi,%r12	# memory address at arr[i]
+	irmovq $1,%r13		# Constant 1
+	irmovq $0,%r8           # Constant i
+	irmovq $8,%r9		# Constant 8 bytes for long
+	rrmovq %rdi,%r10	# memory address at arr[minIndex]
+	jmp find_min_index	# jmp to find_min_index
+
+increment:
+	addq %r13,%r8		# increment i by 1
+	addq %r9,%r12		# goes to next index in array, array[i]
+	jmp find_min_index	# jump to find_min_index
+
+find_min_index:
+	mrmovq (%rsi),%r11	# temporary register for condtion code
+	subq %r8,%r11		# Test len > i
+	jle switching_values	# If len <= i, goto switching_values
+	mrmovq (%r10),%r11	# temporary register to set condition code
+	pushq %rdx		# save callee-saved register
+	mrmovq (%r12),%rdx	# temporarily moves value at arr[i] to temp register
+	subq %rdx,%r11		# Test arr[minIndex] > arr[i]
+	popq %rdx		# restore callee-saved register
+	jle increment		# if arr[minIndex] <= arr[i], goto increment
+	rrmovq %r8,%rax		# set minIndex to i
+	rrmovq %r12,%r10	# sets register that holds value of arr[minIndex] to arr[i]
+	jmp increment		# repeat loop by going to increment
+
+switching_values:
+	rrmovq %rax,%r14	# Test min_index
+	andq %r14,%r14		# sets test condition
+	jle return		# if minIndex <= 0, goto return
+	mrmovq (%rdi),%r11	# sets temp value to arr[0] value
+	mrmovq (%r10),%r8	# temporarily moves value at memory to register
+	rmmovq %r8,(%rdi)	# sets arr[0] to the value at arr[minIndex]
+	rmmovq %r11,(%r10)	# sets arr[minIndex] to the value at arr[0]
+	jmp return		# return
+
+return:
+        ret                     # return
+
+.pos 0x400
+Stack:

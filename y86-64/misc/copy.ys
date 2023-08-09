@@ -1,0 +1,48 @@
+# Initial code
+.pos 0
+init:
+	irmovq Stack,%rsp	# Set up stack pointer
+	irmovq src, %rdi	
+	irmovq dest, %rsi
+	irmovq $3, %rdx		# len = 3
+	call copy_block
+	halt
+
+.align 8
+# Source block
+src:
+	.quad 0x00a
+	.quad 0x0b0
+	.quad 0xc00
+# Destination block
+dest:
+	.quad 0x111
+	.quad 0x222
+	.quad 0x333
+
+# long copy_block(long *src, long *dest, long len)
+# src in %rdi
+# dest in %rsi
+# len in %rdx
+copy_block:
+	xorq %rax, %rax         # result = 0	
+	irmovq $1, %r8		# Constant 1
+	irmovq $8, %r9		# Constant 8 (to incr ptrs)
+	andq %rdx, %rdx		# Test len = 0
+	je Done	   		# If len = 0, goto Done
+	
+Loop:
+	mrmovq (%rdi), %r10	# perform copy
+	rmmovq %r10, (%rsi)
+	xorq %r10, %rax		# result ^= val
+	addq %r9, %rdi		# increment *src by 1
+	addq %r9, %rsi		# increment *dest by 1
+	subq %r8, %rdx		# decrement len by 1
+	addq %rdx, %rdx		# Test len = 0
+	jne Loop   		# If len > 0, repeat Loop
+
+Done:
+	ret			# return
+
+.pos 0x100
+Stack:
